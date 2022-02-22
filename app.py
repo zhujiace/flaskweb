@@ -11,10 +11,16 @@ from flask_login import LoginManager,login_user, login_required, logout_user, cu
 
 from AudioMixer import Mixer
 
+WIN = sys.platform.startswith('win')
+if WIN:  # 如果是 Windows 系统，使用三个斜线
+    prefix = 'sqlite:///'
+else:  # 否则使用四个斜线
+    prefix = 'sqlite:////'
+
 app = Flask(__name__)   #实例化Flask类，创建一个程序对象app
 
 # 以下为配置文件
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.root_path, 'data.db')   # 数据库地址
+app.config['SQLALCHEMY_DATABASE_URI'] = prefix + os.path.join(app.root_path, 'data.db')   # 数据库地址
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # 关闭对模型修改的监控
 app.config['SECRET_KEY'] = 'dev'  # 等同于 app.secret_key = 'dev' 为了flash函数
 
